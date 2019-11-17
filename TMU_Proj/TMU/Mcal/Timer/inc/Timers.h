@@ -48,9 +48,11 @@
 #define SECONDS_TO_NANOSECONSD_FACTOR  1000000000
 #define SECONDS_TO_MICROSECONSD_FACTOR 1000000
 #define SECONDS_TO_MILLISECONSD_FACTOR 1000
-#define MILLISECONSDS_TO_MICROSECONSDS_FACTOR 1000
+#define MILLISECONSD_TO_MICROSECONSD_FACTOR 1000
 #define DUTY_CYCLE_PERCENTAGE_FACTOR   100
 
+
+#define SECONDS_TO_SETCOUNTER 1000000
 
 #define TIFR_TOV0_FLAG_MASK 0x01
 #define TIFR_TOV1_FLAG_MASK 0x04
@@ -68,8 +70,7 @@
 #define SWPWM_2_PORT MYPORTB
 #define SWPWM_2_PIN  BIT4
 
-#define  PRESCALER_MASK 0xf8
-#define  SHIFT_FACTOR 8
+
 
 /* for timer 0 */
 typedef enum {
@@ -199,7 +200,8 @@ extern volatile uint16 Gv_PrescallerTimer2_AbsoluteValue;
 extern volatile uint8 Gv_PrescallerTimer0_Mask;
 extern volatile uint8 Gv_PrescallerTimer1_Mask;
 extern volatile uint8 Gv_PrescallerTimer2_Mask;
-
+extern volatile uint8 Timer_Flag;
+extern volatile uint8 Time_Init;
 /************************************************************************/
 /*                   Timers' Functions' prototypes                      */
 /************************************************************************/
@@ -221,7 +223,7 @@ uint8 Timers_Init(Timers_CFG_S* cfg_s);
  * @param count the no to wait for 
  * @return the Status of the initialization [OK Or NOT_OK]
  */
-uint8 Timers_SetCounter(uint8 ch_no,uint16 count);
+uint8 Timers_SetCounter(uint8 ch_no,uint32 count);
 
 /**
  * Function : Timers_Start

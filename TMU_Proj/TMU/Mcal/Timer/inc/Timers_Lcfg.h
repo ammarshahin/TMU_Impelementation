@@ -32,7 +32,7 @@
 typedef struct Timers_CFG_S{
 	uint8  ch_no;
 	uint8  Timers_Mode;
-	uint16 Timers_count;
+	uint32 Timers_count;
 	uint8  Timers_Interrupt;
 	uint32 CPU_CLK;
 }Timers_CFG_S;

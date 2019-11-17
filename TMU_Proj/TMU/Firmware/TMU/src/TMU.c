@@ -15,6 +15,8 @@
 #include "Timers_Lcfg.h"
 #include "Timers.h"
 
+#include "Led.h"
+
 /************************************************************************/
 /*                               LOCAL MACROS                           */
 /************************************************************************/
@@ -22,8 +24,6 @@
 #define ONE 1
 /* the max delay time by timer 1 assuming 8 mhz freq and 1024 Prescaler in milliseconds*/
 #define MAX_DELAY_TIME 8000000
-
-
 
 /************************************************************************/
 /*                     LOCAL FUNCTIONS PROTOTYPES                       */
@@ -34,7 +34,7 @@
 /************************************************************************/
 /*                       GLOBAL STATIC VARIABLES                        */
 /************************************************************************/
-static job_Struct Gv_TmuJobsBuffer[MAX_NO_OF_JOBS]
+static job_Struct Gv_TmuJobsBuffer[MAX_NO_OF_JOBS];
 static uint8 Gv_JobsCount;
 static uint8 Gv_TimerNumber;
 
@@ -65,20 +65,20 @@ static uint8 Gv_TimerNumber;
  */
 EnmTMUError_t TMU_Init(const TMU_ConfigType *ConfigPtr ) 
 {
-	EnmTMUError_t state = OK;
+	EnmTMUError_t state = OK_t;
 	uint32 TimerCount_Time;
 	
 	/* Initializing the Global variable counter to one and the Zero will indicate that there are no job */
-	Gv_JobsCount = ONE;
+	Gv_JobsCount = ZERO;
 	Gv_TimerNumber = ConfigPtr->Timer_no;
+	TimerCount_Time = MILLISECONSD_TO_MICROSECONSD_FACTOR * ConfigPtr->Resolution;
 	/* init the timer used in the Tmu */
 	switch(Gv_TimerNumber)
-	{ #define  
+	{
 		case TIMER_0:
 			/* Init the Timer Used  */
 			Timers_Init(&timer0_cfg_s);
 			/* Set the default resolution  */
-			TimerCount_Time = MILLISECONSDS_TO_MICROSECONSDS_FACTOR * ConfigPtr->Resolution;
 			Timers_SetCounter(TIMER_0,TimerCount_Time);
 			/* Start the Timer Used  */
 			Timers_Start(TIMER_0);
@@ -87,7 +87,6 @@ EnmTMUError_t TMU_Init(const TMU_ConfigType *ConfigPtr )
 			/* Init the Timer Used  */
 			Timers_Init(&timer1_cfg_s);
 			/* Set the default resolution  */
-			TimerCount_Time = MILLISECONSDS_TO_MICROSECONSDS_FACTOR * ConfigPtr->Resolution;
 			Timers_SetCounter(TIMER_1,TimerCount_Time);
 			/* Start the Timer Used  */
 			Timers_Start(TIMER_1);
@@ -97,14 +96,13 @@ EnmTMUError_t TMU_Init(const TMU_ConfigType *ConfigPtr )
 			Timers_Init(&timer2_cfg_s);
 			
 			/* Set the default resolution  */
-			TimerCount_Time = MILLISECONSDS_TO_MICROSECONSDS_FACTOR * ConfigPtr->Resolution;
 			Timers_SetCounter(TIMER_2, TimerCount_Time);
 			
 			/* Start the Timer Used  */
 			Timers_Start(TIMER_2);
 			break;
 		default:
-			state = NOT_OK;
+			state = NOT_OK_t;
 			break;
 	}
 	
@@ -117,34 +115,60 @@ EnmTMUError_t TMU_Init(const TMU_ConfigType *ConfigPtr )
  * Description: this function is to create and start the job
  * @param delay_time: 
 					i/p: The delay time that the job needs to wait in milliseconds
+ * @param job_Type:
+					i/p: The Type of the job >> [JOB_ONCE or JOB_PERIODIC]
  * @param Fun_Pointer: 
 					i/p: Pointer to the function to be called at the end of the delay
  * @param Job_ID_Num: 
 					o/p: Returns the ID Number with the pointer
  * @return EnmTMUError_t: the status of the function according to the Error handling Enum 
  */
-EnmTMUError_t TMU_Start_Timer(uint32 delay_time,v_ptrFun_v callBackFunctionPtr,uint8* Job_ID_Num)
+EnmTMUError_t TMU_Start_Timer(uint32 delay_time, uint8 job_Type, v_ptrFun_v callBackFunctionPtr, uint8* Job_ID_Num)
 {
 	
-	EnmTMUError_t state = OK;
+	EnmTMUError_t state = OK_t;
+	uint8 index;
 	
-	/* test if there is enough space in the Job Stack */
+	/* check if there is enough space in the Job Stack */
 	if( Gv_JobsCount > MAX_NO_OF_JOBS )
 	{
 		state = NO_ENOUGH_SPACE_IN_STACK;
-	}
+	} /* check if the delay is a valid delay */
 	else if(delay_time > MAX_DELAY_TIME)
 	{
 		state = DELAY_IS_VERY_LARGE;
 	}
+	else if( job_Type != JOB_ONCE &&  job_Type != JOB_PERIODIC)
+	{
+		state = NOT_VALID_JOB_TYPE;
+	}
 	else
 	{
-		Gv_TmuJobsBuffer[Gv_JobsCount].job_ID = Gv_JobsCount;
-		Gv_TmuJobsBuffer[Gv_JobsCount].job_time = delay_time;
-		Gv_TmuJobsBuffer[Gv_JobsCount].job_Funptr = callBackFunctionPtr;
-		*Job_ID_Num = Gv_JobsCount;
-		Gv_JobsCount++;
+		state = OK_t;
 	}
+	
+	if(state == OK_t)
+	{
+		for(index = ONE; index < MAX_NO_OF_JOBS ; index++ )
+		{
+			if(Gv_TmuJobsBuffer[index].job_ID == FALSE)
+			{
+				Gv_TmuJobsBuffer[index].job_ID = index;
+				Gv_TmuJobsBuffer[index].job_Type = job_Type;
+				Gv_TmuJobsBuffer[index].job_Time = delay_time;
+				Gv_TmuJobsBuffer[index].job_Funptr = callBackFunctionPtr;
+				Gv_TmuJobsBuffer[index].job_Passed = ZERO;
+				*Job_ID_Num = index;
+				Gv_JobsCount++;
+				break;
+			}
+			else
+			{
+				//Do nothing
+			}
+		}
+	}
+	
 	return state;
 }
 
@@ -159,22 +183,29 @@ EnmTMUError_t TMU_Start_Timer(uint32 delay_time,v_ptrFun_v callBackFunctionPtr,u
  */
 EnmTMUError_t TMU_Stop_Timer(uint8 Job_ID_Num)
 {
-	EnmTMUError_t state = OK;
-	uint8 index = ZERO;
+	EnmTMUError_t state = OK_t;
+	uint8 index;
 	uint8 found_Flag = FALSE;
 	
-	/* Check for possible errors */
-	while(index < Gv_JobsCount)
+	
+	for(index = ONE; index < MAX_NO_OF_JOBS ; index++ )
 	{
-		if( Job_ID_Num == Gv_TmuJobsBuffer[index].job_ID )
+		if(Gv_TmuJobsBuffer[index].job_ID == Job_ID_Num)
 		{
+			Gv_TmuJobsBuffer[index].job_ID = ZERO;
+			Gv_TmuJobsBuffer[index].job_Type = FALSE;
+			Gv_TmuJobsBuffer[index].job_Time = FALSE;
+			Gv_TmuJobsBuffer[index].job_Passed = FALSE;
+			Gv_TmuJobsBuffer[index].job_Funptr = NULL;
+			Gv_JobsCount--;
 			found_Flag = TRUE;
 			break;
 		}
 		else
 		{
-			index++;
+			//Do nothing
 		}
+
 	}
 	
 	if (found_Flag == FALSE)
@@ -183,14 +214,50 @@ EnmTMUError_t TMU_Stop_Timer(uint8 Job_ID_Num)
 	}
 	else
 	{
-		Gv_TmuJobsBuffer[index].job_ID     = 0;
-		Gv_TmuJobsBuffer[index].job_time   = 0;
-		Gv_TmuJobsBuffer[index].job_Funptr = NULL;
+		//Do nothing
 	}
 	
 	return state;
 }	
 
+
+
+/**
+ * Function : TMU_Dispatcher
+ * Description: This function is to come periodically and check for the time passed for every job 
+ * @return EnmTMUError_t: the status of the function according to the Error handling Enum 
+ */
+void TMU_Dispatcher(void) 
+{
+	uint8 index;
+	if(Timer_Flag)
+	{
+		for(index = ONE; (index <= Gv_JobsCount) && (Gv_TmuJobsBuffer[index].job_ID != ZERO) ; index++ )
+		{
+				/* Update the Time Passed and check if the time come or not */
+				Gv_TmuJobsBuffer[index].job_Passed += DEFAULT_RESELOTION;
+			
+				if ( Gv_TmuJobsBuffer[index].job_Passed == Gv_TmuJobsBuffer[index].job_Time )
+				{
+					Gv_TmuJobsBuffer[index].job_Funptr();
+					Gv_TmuJobsBuffer[index].job_Passed = ZERO;
+					if(Gv_TmuJobsBuffer[index].job_Type == JOB_ONCE)
+					{
+						TMU_Stop_Timer(Gv_TmuJobsBuffer[index].job_ID);
+					}
+					else
+					{
+						// Do Nothing 
+					}
+				}
+				else
+				{
+					// Do Nothing 
+				}
+		}
+		Timer_Flag = FALSE;
+	}
+}
 
 
 
@@ -203,21 +270,32 @@ EnmTMUError_t TMU_Stop_Timer(uint8 Job_ID_Num)
  */
 EnmTMUError_t TMU_DeInit(void) 
 {
-	EnmTMUError_t state = OK;
+	EnmTMUError_t state = OK_t;
 	uint8 index;
 	
 	/* Stop the Timer and reset it to the default state */
 	Timers_Stop(Gv_TimerNumber);
-	Timers_DeInit(Gv_TimerNumber);
+	//Timers_DeInit(Gv_TimerNumber);
 	
-	for(index = 1 ; index < Gv_JobsCount ; index++)
+	for(index = ONE; index < MAX_NO_OF_JOBS ; index++ )
 	{
-		Gv_TmuJobsBuffer[index].job_ID     = 0;
-		Gv_TmuJobsBuffer[index].job_time   = 0;
-		Gv_TmuJobsBuffer[index].job_Funptr = NULL;
+		if(Gv_TmuJobsBuffer[index].job_ID != FALSE)
+		{
+			Gv_TmuJobsBuffer[index].job_ID = FALSE;
+			Gv_TmuJobsBuffer[index].job_Type = FALSE;
+			Gv_TmuJobsBuffer[index].job_Time = FALSE;
+			Gv_TmuJobsBuffer[index].job_Passed = FALSE;
+			Gv_TmuJobsBuffer[index].job_Funptr = NULL;
+			Gv_JobsCount--;
+		}
+		else
+		{
+			//Do nothing
+		}
 	}
-	/* return the Number of jobs back to One */
-	Gv_JobsCount = ONE;
 	
-	return OK;
+	/* return the Number of jobs back to One */
+	Gv_JobsCount = ZERO;
+	
+	return state;
 }

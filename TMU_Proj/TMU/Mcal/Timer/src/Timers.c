@@ -12,7 +12,9 @@
 #include "Gpio.h"
 #include "Timers_Lcfg.h"
 #include "Timers.h"
- 
+#include "Interrupts.h"
+#include "Led.h"
+
 /************************************************************************/
 /*                          Global Variables                            */
 /************************************************************************/
@@ -28,8 +30,16 @@ volatile uint8 Gv_PrescallerTimer1_Mask = T1_PRESCALER_1024;
 volatile uint8 Gv_PrescallerTimer2_Mask = T2_PRESCALER_1;
 
 static volatile uint32 Gv_F_CPU;
-static volatile uint8  Gv_Count;
+static volatile uint16  Gv_Count;
+volatile uint8 Timer_Flag;
 
+volatile uint8 Time_Init;
+
+/************************************************************************/
+/*                               MACROS                                 */
+/************************************************************************/
+#define SHIFT_FACTOR 8
+#define PRESCALER_MASK 0xf8
 
 /************************************************************************/
 /*                   Timers' Functions' Implementations                 */
@@ -80,8 +90,8 @@ uint8 Timers_Init(Timers_CFG_S* cfg_s)
 			case TIMER1:				
 			TCCR1A |= (cfg_s->Timers_Mode & 0x03);
 			TCCR1B |= (cfg_s->Timers_Mode & 0x18);
-			TCCR1A |= T1_OC1A_CLEAR;
-			Gpio_PinDirection(MYPORTD,BIT5,SET_OUT);
+			TIMSK |= 0x04;
+			Interrupts_On();
 			switch(Gv_PrescallerTimer1_Mask)
 			{
 				case T1_NO_CLOCK :
@@ -137,7 +147,8 @@ uint8 Timers_Init(Timers_CFG_S* cfg_s)
 			cfg_Result = NOT_OK;
 			break;
 	}
-	Timers_SetCounter(cfg_s->ch_no,cfg_s->Timers_count);
+	Gv_Count = cfg_s->Timers_count;
+	Timers_SetCounter(cfg_s->ch_no,Gv_Count);
 	return cfg_Result;
 }
 
@@ -151,7 +162,7 @@ uint8 Timers_Init(Timers_CFG_S* cfg_s)
  * @param count the no to wait for 
  * @return the Status of the initialization [OK Or NOT_OK]
  */
-uint8 Timers_SetCounter(uint8 ch_no,uint16 count)
+uint8 Timers_SetCounter(uint8 ch_no,uint32 count)
 {
 	uint32 no_Of_Counts,cfg_Result = NOT_OK;
 	switch (ch_no)
@@ -177,10 +188,10 @@ uint8 Timers_SetCounter(uint8 ch_no,uint16 count)
 			cfg_Result = NOT_OK;
 		}
 		else
-		{
+		{  
 			Gv_Count = TIMER1_MAX_COUNT - no_Of_Counts;
-			TCNT1L = (uint8)Gv_Count;
-			TCNT1H = (uint8)( Gv_Count >> 8);
+			TCNT1H = (uint8)( Gv_Count >> SHIFT_FACTOR);
+			TCNT1L = (uint8) (Gv_Count);
 			cfg_Result = OK;
 		}
 	break;
@@ -204,6 +215,7 @@ uint8 Timers_SetCounter(uint8 ch_no,uint16 count)
 	break;
 	
 	}
+	Gv_Count = count;
 	return cfg_Result;
 }
 /**
@@ -212,6 +224,8 @@ uint8 Timers_SetCounter(uint8 ch_no,uint16 count)
  * @param ch_no : The timer Channel >> {TIMER0,TIMER1,TIMER2}
  * @return the Status of the initialization [OK Or NOT_OK]
  */
+
+
 uint8 Timers_Start(uint8 ch_no)
 {
 	switch (ch_no)
@@ -220,7 +234,7 @@ uint8 Timers_Start(uint8 ch_no)
 		TCCR0 = ( (TCCR0 & PRESCALER_MASK) | Gv_PrescallerTimer0_Mask);
 		break;
 	case TIMER1:
-		TCCR1B = ( (TCCR1B & PRESCALER_MASK) | Gv_PrescallerTimer1_Mask);
+		TCCR1B= ( (TCCR1B & PRESCALER_MASK) | Gv_PrescallerTimer1_Mask);
 		break;
 	case TIMER2:
 		TCCR2 = ( (TCCR2 & PRESCALER_MASK) | Gv_PrescallerTimer2_Mask);
@@ -239,8 +253,6 @@ uint8 Timers_Start(uint8 ch_no)
  * @param ch_no : The timer Channel >> {TIMER0,TIMER1,TIMER2}
  * @return the Status of the initialization [OK Or NOT_OK]
  */
-
-
 uint8 Timers_Stop(uint8 ch_no)
 {
 	switch (ch_no)
@@ -249,7 +261,7 @@ uint8 Timers_Stop(uint8 ch_no)
 		TCCR0 &= PRESCALER_MASK;
 		break;
 	case TIMER1:
-		TCCR1B &= PRESCALER_MASK);
+		TCCR1B &= PRESCALER_MASK;
 		break;
 	case TIMER2:
 		TCCR2 &= PRESCALER_MASK;
@@ -267,7 +279,7 @@ uint8 Timers_Stop(uint8 ch_no)
  * @param ch_no : The timer Channel >> {TIMER0,TIMER1,TIMER2}
  * return the value read by the function
  */
-uint16 Timers_Read(uint8 ch_no)
+uint32 Timers_Read(uint8 ch_no)
 {
 	switch (ch_no)
 	{
@@ -275,10 +287,8 @@ uint16 Timers_Read(uint8 ch_no)
 		return TCNT0;
 		break;
 	case TIMER1:
-		return ( (TCNT1L) | ( TCNT1H << SHIFT_FACTOR ) );
 		break;
 	case TIMER2:
-		return TCNT2;
 		break;
 	default:
 		break;
@@ -715,4 +725,11 @@ void Timers_timer2_SwPWM(uint8 dutyCycle,uint64 freq)
 		Gpio_PinWrite(SWPWM_2_PORT,SWPWM_2_PIN,FALSE);
 		Timers_timer2_Delay_ns(time_Off_ns);
 	}
+}
+
+
+ISR_T(TIMER1_OVF_vect)
+{
+	Timer_Flag = TRUE;
+	Timers_SetCounter(TIMER1,Gv_Count);
 }

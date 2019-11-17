@@ -12,7 +12,7 @@
 #include "Timers.h"
 #include "MCU_Frequency.h"
 
-#define Counter_Default 20000
+#define Counter_Default 1000000
 
 
 /************************************************************************/
@@ -31,9 +31,9 @@ Timers_CFG_S timer0_cfg_s = {
 /* timer 1 structure */
 Timers_CFG_S timer1_cfg_s = {
 	TIMER1,
-	T1_PWM_PhaseCorrect_ICR1_MODE,
+	T1_NORMAL_MODE,
 	Counter_Default,
-	POLLING,
+	INTERRUPT,
 	F_CPU,
 };
 

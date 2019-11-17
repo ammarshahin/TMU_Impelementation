@@ -23,8 +23,9 @@
 #define TIMER_1  1
 #define TIMER_2  2
 
-/* the Max Number Of Jobs that can be created */
-#define MAX_NO_OF_JOBS 100
+
+/* the default resolution in milliseconds */
+#define DEFAULT_RESELOTION 1
 
 
 /************************************************************************/
@@ -35,7 +36,6 @@
 typedef struct TMU_ConfigType{
 	uint8 Timer_no;
 	uint8 Resolution;
-	uint8 MaxNoOfJobs;
 }TMU_ConfigType;
 
 /************************************************************************/

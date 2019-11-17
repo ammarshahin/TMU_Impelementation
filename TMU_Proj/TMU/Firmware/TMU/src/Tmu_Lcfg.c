@@ -17,8 +17,6 @@
 /*                               LOCAL MACROS                           */
 /************************************************************************/
 
-/* the default resolution in milliseconds */ 
-#define DEFAULT_RESELOTION 1 
 
 
 /************************************************************************/
@@ -26,5 +24,5 @@
 /************************************************************************/
 TMU_ConfigType tmu_cfg_s = {
 	TIMER_1,               // Timer Number 
-	DEFAULT_RESELOTION   // Resolution
+	DEFAULT_RESELOTION,   // Resolution
 };
