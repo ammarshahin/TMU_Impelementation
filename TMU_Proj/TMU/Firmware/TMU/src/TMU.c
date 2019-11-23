@@ -5,28 +5,23 @@
  *  Author: Ammar Shahin
  */ 
 
-
 /************************************************************************/
 /*                               INCLUDES                               */
 /************************************************************************/
 #include "Typedefs.h"
-#include "Tmu.h"
-#include "Tmu_Lcfg.h"
 #include "Timers_Lcfg.h"
 #include "Timers.h"
+#include "Tmu.h"
+#include "Tmu_Lcfg.h"
+
 /************************************************************************/
 /*                               LOCAL MACROS                           */
 /************************************************************************/
 #define INITIAL_VALUE_ZERO 0
 #define INITIAL_VALUE_ONE 1
+
 /* the max delay time by timer 1 assuming 8 mhz freq and 1024 Prescaler in milliseconds*/
 #define MAX_DELAY_TIME 8000000
-
-/************************************************************************/
-/*                     LOCAL FUNCTIONS PROTOTYPES                       */
-/************************************************************************/
-
-
 
 /************************************************************************/
 /*                       GLOBAL STATIC VARIABLES                        */
@@ -35,19 +30,6 @@ static StrTMU_Job_type gStrTMU_JobsBuffer[MAX_NO_OF_JOBS];
 static uint8 gJobsCount;
 static uint8 gTimerNumber;
 static uint8 gTimer_Flag;
-
-
-/************************************************************************/
-/*                       GLOBAL EXTERN VARIABLES                        */
-/************************************************************************/
-
-
-
-/************************************************************************/
-/*                       LOCAL FUNCTIONS IMPLEMENTATION                 */
-/************************************************************************/
-
-
 
 /************************************************************************/
 /*                           APIs IMPLEMENTATION                        */

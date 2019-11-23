@@ -28,14 +28,13 @@
 /* the Max Number Of Jobs that can be created */
 #define MAX_NO_OF_JOBS 5
 
+/* the Timers Defines Numbers */
+#define TIMER_0  0
+#define TIMER_1  1
+#define TIMER_2  2
 
-
-
-
-/************************************************************************/
-/*                               PRIMITIVE TYPES                         */
-/************************************************************************/
-
+/* the default resolution in milliseconds */
+#define DEFAULT_RESELOTION 1
 
 /************************************************************************/
 /*                               ENUMS                                  */
@@ -59,13 +58,6 @@ typedef struct{
 	uint32 job_Passed;
 	v_ptrFun_v job_Funptr;
 }StrTMU_Job_type;
-
-/************************************************************************/
-/*                       FUNCTION-LIKE MACROS                           */
-/************************************************************************/
-
-
-
 
 /************************************************************************/
 /*                       FUNCTION PROTOTYPES                           */

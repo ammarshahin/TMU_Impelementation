@@ -19,15 +19,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 00000be2  00000000  00000000  000035f3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00001d56  00000000  00000000  000041d5  2**0
+  8 .debug_line   00001d55  00000000  00000000  000041d5  2**0
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000bc0  00000000  00000000  00005f2c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000112b  00000000  00000000  00006aec  2**0
+ 10 .debug_str    0000115e  00000000  00000000  00006aec  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00001958  00000000  00000000  00007c17  2**0
+ 11 .debug_loc    00001958  00000000  00000000  00007c4a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000248  00000000  00000000  0000956f  2**0
+ 12 .debug_ranges 00000248  00000000  00000000  000095a2  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -96,12 +96,6 @@ Disassembly of section .text:
       8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000092 <Led_Init>:
-		Gpio_PinWrite(LED_PORT,LED3,FALSE);
-		break;
-		default:
-		break;
-	}
-}
       92:	cf 93       	push	r28
       94:	df 93       	push	r29
       96:	1f 92       	push	r1
@@ -170,19 +164,12 @@ Disassembly of section .text:
      124:	08 95       	ret
 
 00000126 <Led_Tog>:
-/**
- * Description: Function to Toggle the Led.
- * @param led_Num the number of the Led [LED0,LED1,LED2,LED3]
- */
-void Led_Tog(led led_Num)
-{
      126:	cf 93       	push	r28
      128:	df 93       	push	r29
      12a:	1f 92       	push	r1
      12c:	cd b7       	in	r28, 0x3d	; 61
      12e:	de b7       	in	r29, 0x3e	; 62
      130:	89 83       	std	Y+1, r24	; 0x01
-	switch(led_Num)
      132:	89 81       	ldd	r24, Y+1	; 0x01
      134:	88 2f       	mov	r24, r24
      136:	90 e0       	ldi	r25, 0x00	; 0
@@ -194,67 +181,30 @@ void Led_Tog(led led_Num)
      142:	1c f4       	brge	.+6      	; 0x14a <Led_Tog+0x24>
      144:	40 97       	sbiw	r24, 0x10	; 16
      146:	41 f0       	breq	.+16     	; 0x158 <Led_Tog+0x32>
-		break;
-		case LED3 :
-		Gpio_PinToggle(LED_PORT,LED3);
-		break;
-		default:
-		break;
      148:	1b c0       	rjmp	.+54     	; 0x180 <Led_Tog+0x5a>
- * Description: Function to Toggle the Led.
- * @param led_Num the number of the Led [LED0,LED1,LED2,LED3]
- */
-void Led_Tog(led led_Num)
-{
-	switch(led_Num)
      14a:	80 34       	cpi	r24, 0x40	; 64
      14c:	91 05       	cpc	r25, r1
      14e:	71 f0       	breq	.+28     	; 0x16c <Led_Tog+0x46>
      150:	80 38       	cpi	r24, 0x80	; 128
      152:	91 05       	cpc	r25, r1
      154:	81 f0       	breq	.+32     	; 0x176 <Led_Tog+0x50>
-		break;
-		case LED3 :
-		Gpio_PinToggle(LED_PORT,LED3);
-		break;
-		default:
-		break;
      156:	14 c0       	rjmp	.+40     	; 0x180 <Led_Tog+0x5a>
-void Led_Tog(led led_Num)
-{
-	switch(led_Num)
-	{
-		case LED0 :
-		Gpio_PinToggle(LED_PORT,LED0);
      158:	60 e1       	ldi	r22, 0x10	; 16
      15a:	81 e0       	ldi	r24, 0x01	; 1
      15c:	0e 94 8f 05 	call	0xb1e	; 0xb1e <Gpio_PinToggle>
-		break;
      160:	0f c0       	rjmp	.+30     	; 0x180 <Led_Tog+0x5a>
-		case LED1 :
-		Gpio_PinToggle(LED_PORT,LED1);
      162:	60 e2       	ldi	r22, 0x20	; 32
      164:	81 e0       	ldi	r24, 0x01	; 1
      166:	0e 94 8f 05 	call	0xb1e	; 0xb1e <Gpio_PinToggle>
-		break;
      16a:	0a c0       	rjmp	.+20     	; 0x180 <Led_Tog+0x5a>
-		case LED2 :
-		Gpio_PinToggle(LED_PORT,LED2);
      16c:	60 e4       	ldi	r22, 0x40	; 64
      16e:	81 e0       	ldi	r24, 0x01	; 1
      170:	0e 94 8f 05 	call	0xb1e	; 0xb1e <Gpio_PinToggle>
-		break;
      174:	05 c0       	rjmp	.+10     	; 0x180 <Led_Tog+0x5a>
-		case LED3 :
-		Gpio_PinToggle(LED_PORT,LED3);
      176:	60 e8       	ldi	r22, 0x80	; 128
      178:	81 e0       	ldi	r24, 0x01	; 1
      17a:	0e 94 8f 05 	call	0xb1e	; 0xb1e <Gpio_PinToggle>
-		break;
      17e:	00 00       	nop
-		default:
-		break;
-	}
      180:	00 00       	nop
      182:	0f 90       	pop	r0
      184:	df 91       	pop	r29
@@ -1192,12 +1142,6 @@ void led3_Tog(void)
      886:	08 95       	ret
 
 00000888 <Gpio_PinDirection>:
- * @param pins : the pin Number {BIT0,BIT1,BIT2,BIT3,BIT4,BIT5,BIT6,BIT7}
- * @param direction : The Direction of the PIN >> {SET_IN , SET_OUT}
- * Return : void
- */
-void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
-{
      888:	cf 93       	push	r28
      88a:	df 93       	push	r29
      88c:	00 d0       	rcall	.+0      	; 0x88e <Gpio_PinDirection+0x6>
@@ -1207,7 +1151,6 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      894:	89 83       	std	Y+1, r24	; 0x01
      896:	6a 83       	std	Y+2, r22	; 0x02
      898:	4b 83       	std	Y+3, r20	; 0x03
-	switch(port)
      89a:	89 81       	ldd	r24, Y+1	; 0x01
      89c:	88 2f       	mov	r24, r24
      89e:	90 e0       	ldi	r25, 0x00	; 0
@@ -1219,19 +1162,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      8aa:	1c f4       	brge	.+6      	; 0x8b2 <Gpio_PinDirection+0x2a>
      8ac:	89 2b       	or	r24, r25
      8ae:	49 f0       	breq	.+18     	; 0x8c2 <Gpio_PinDirection+0x3a>
-				break;
-			}
-		}
-		break;
-	}
-}
      8b0:	90 c0       	rjmp	.+288    	; 0x9d2 <Gpio_PinDirection+0x14a>
- * @param direction : The Direction of the PIN >> {SET_IN , SET_OUT}
- * Return : void
- */
-void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
-{
-	switch(port)
      8b2:	82 30       	cpi	r24, 0x02	; 2
      8b4:	91 05       	cpc	r25, r1
      8b6:	09 f4       	brne	.+2      	; 0x8ba <Gpio_PinDirection+0x32>
@@ -1239,19 +1170,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      8ba:	03 97       	sbiw	r24, 0x03	; 3
      8bc:	09 f4       	brne	.+2      	; 0x8c0 <Gpio_PinDirection+0x38>
      8be:	67 c0       	rjmp	.+206    	; 0x98e <Gpio_PinDirection+0x106>
-				break;
-			}
-		}
-		break;
-	}
-}
      8c0:	88 c0       	rjmp	.+272    	; 0x9d2 <Gpio_PinDirection+0x14a>
-{
-	switch(port)
-	{
-		case MYPORTA :
-		{
-		switch(direction)
      8c2:	8b 81       	ldd	r24, Y+3	; 0x03
      8c4:	88 2f       	mov	r24, r24
      8c6:	90 e0       	ldi	r25, 0x00	; 0
@@ -1260,19 +1179,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      8cc:	8f 3f       	cpi	r24, 0xFF	; 255
      8ce:	91 05       	cpc	r25, r1
      8d0:	71 f0       	breq	.+28     	; 0x8ee <Gpio_PinDirection+0x66>
-		case SET_OUT : 
-		DDR_A |= (pins);
-		break;
-		}
-		}
-		break;
      8d2:	7f c0       	rjmp	.+254    	; 0x9d2 <Gpio_PinDirection+0x14a>
-		case MYPORTA :
-		{
-		switch(direction)
-		{
-		case SET_IN : 
-		DDR_A &= ~(pins);
      8d4:	8a e3       	ldi	r24, 0x3A	; 58
      8d6:	90 e0       	ldi	r25, 0x00	; 0
      8d8:	2a e3       	ldi	r18, 0x3A	; 58
@@ -1285,10 +1192,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      8e6:	23 23       	and	r18, r19
      8e8:	fc 01       	movw	r30, r24
      8ea:	20 83       	st	Z, r18
-		break;
      8ec:	0b c0       	rjmp	.+22     	; 0x904 <Gpio_PinDirection+0x7c>
-		case SET_OUT : 
-		DDR_A |= (pins);
      8ee:	8a e3       	ldi	r24, 0x3A	; 58
      8f0:	90 e0       	ldi	r25, 0x00	; 0
      8f2:	2a e3       	ldi	r18, 0x3A	; 58
@@ -1299,16 +1203,8 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      8fc:	23 2b       	or	r18, r19
      8fe:	fc 01       	movw	r30, r24
      900:	20 83       	st	Z, r18
-		break;
      902:	00 00       	nop
-		}
-		}
-		break;
      904:	66 c0       	rjmp	.+204    	; 0x9d2 <Gpio_PinDirection+0x14a>
-		
-		case MYPORTB :
-		{
-		switch(direction)
      906:	8b 81       	ldd	r24, Y+3	; 0x03
      908:	88 2f       	mov	r24, r24
      90a:	90 e0       	ldi	r25, 0x00	; 0
@@ -1317,19 +1213,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      910:	8f 3f       	cpi	r24, 0xFF	; 255
      912:	91 05       	cpc	r25, r1
      914:	71 f0       	breq	.+28     	; 0x932 <Gpio_PinDirection+0xaa>
-		case SET_OUT :
-			DDR_B |= (pins);
-			break;
-		}
-		}
-		break;
      916:	5d c0       	rjmp	.+186    	; 0x9d2 <Gpio_PinDirection+0x14a>
-		case MYPORTB :
-		{
-		switch(direction)
-		{
-		case SET_IN :
-			DDR_B &= ~(pins);
      918:	87 e3       	ldi	r24, 0x37	; 55
      91a:	90 e0       	ldi	r25, 0x00	; 0
      91c:	27 e3       	ldi	r18, 0x37	; 55
@@ -1342,10 +1226,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      92a:	23 23       	and	r18, r19
      92c:	fc 01       	movw	r30, r24
      92e:	20 83       	st	Z, r18
-			break;
      930:	0b c0       	rjmp	.+22     	; 0x948 <Gpio_PinDirection+0xc0>
-		case SET_OUT :
-			DDR_B |= (pins);
      932:	87 e3       	ldi	r24, 0x37	; 55
      934:	90 e0       	ldi	r25, 0x00	; 0
      936:	27 e3       	ldi	r18, 0x37	; 55
@@ -1356,15 +1237,8 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      940:	23 2b       	or	r18, r19
      942:	fc 01       	movw	r30, r24
      944:	20 83       	st	Z, r18
-			break;
      946:	00 00       	nop
-		}
-		}
-		break;
      948:	44 c0       	rjmp	.+136    	; 0x9d2 <Gpio_PinDirection+0x14a>
-		case MYPORTC :
-		{
-			switch(direction)
      94a:	8b 81       	ldd	r24, Y+3	; 0x03
      94c:	88 2f       	mov	r24, r24
      94e:	90 e0       	ldi	r25, 0x00	; 0
@@ -1373,19 +1247,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      954:	8f 3f       	cpi	r24, 0xFF	; 255
      956:	91 05       	cpc	r25, r1
      958:	71 f0       	breq	.+28     	; 0x976 <Gpio_PinDirection+0xee>
-				case SET_OUT :
-				DDR_C |= (pins);
-				break;
-			}
-		}
-		break;
      95a:	3b c0       	rjmp	.+118    	; 0x9d2 <Gpio_PinDirection+0x14a>
-		case MYPORTC :
-		{
-			switch(direction)
-			{
-				case SET_IN :
-				DDR_C &= ~(pins);
      95c:	84 e3       	ldi	r24, 0x34	; 52
      95e:	90 e0       	ldi	r25, 0x00	; 0
      960:	24 e3       	ldi	r18, 0x34	; 52
@@ -1398,10 +1260,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      96e:	23 23       	and	r18, r19
      970:	fc 01       	movw	r30, r24
      972:	20 83       	st	Z, r18
-				break;
      974:	0b c0       	rjmp	.+22     	; 0x98c <Gpio_PinDirection+0x104>
-				case SET_OUT :
-				DDR_C |= (pins);
      976:	84 e3       	ldi	r24, 0x34	; 52
      978:	90 e0       	ldi	r25, 0x00	; 0
      97a:	24 e3       	ldi	r18, 0x34	; 52
@@ -1412,15 +1271,8 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      984:	23 2b       	or	r18, r19
      986:	fc 01       	movw	r30, r24
      988:	20 83       	st	Z, r18
-				break;
      98a:	00 00       	nop
-			}
-		}
-		break;
      98c:	22 c0       	rjmp	.+68     	; 0x9d2 <Gpio_PinDirection+0x14a>
-		case MYPORTD :
-		{
-			switch(direction)
      98e:	8b 81       	ldd	r24, Y+3	; 0x03
      990:	88 2f       	mov	r24, r24
      992:	90 e0       	ldi	r25, 0x00	; 0
@@ -1429,19 +1281,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      998:	8f 3f       	cpi	r24, 0xFF	; 255
      99a:	91 05       	cpc	r25, r1
      99c:	71 f0       	breq	.+28     	; 0x9ba <Gpio_PinDirection+0x132>
-				case SET_OUT :
-				DDR_D |= (pins);
-				break;
-			}
-		}
-		break;
      99e:	18 c0       	rjmp	.+48     	; 0x9d0 <Gpio_PinDirection+0x148>
-		case MYPORTD :
-		{
-			switch(direction)
-			{
-				case SET_IN :
-				DDR_D &= ~(pins);
      9a0:	81 e3       	ldi	r24, 0x31	; 49
      9a2:	90 e0       	ldi	r25, 0x00	; 0
      9a4:	21 e3       	ldi	r18, 0x31	; 49
@@ -1454,10 +1294,7 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      9b2:	23 23       	and	r18, r19
      9b4:	fc 01       	movw	r30, r24
      9b6:	20 83       	st	Z, r18
-				break;
      9b8:	0b c0       	rjmp	.+22     	; 0x9d0 <Gpio_PinDirection+0x148>
-				case SET_OUT :
-				DDR_D |= (pins);
      9ba:	81 e3       	ldi	r24, 0x31	; 49
      9bc:	90 e0       	ldi	r25, 0x00	; 0
      9be:	21 e3       	ldi	r18, 0x31	; 49
@@ -1468,14 +1305,8 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      9c8:	23 2b       	or	r18, r19
      9ca:	fc 01       	movw	r30, r24
      9cc:	20 83       	st	Z, r18
-				break;
      9ce:	00 00       	nop
-			}
-		}
-		break;
      9d0:	00 00       	nop
-	}
-}
      9d2:	00 00       	nop
      9d4:	0f 90       	pop	r0
      9d6:	0f 90       	pop	r0
@@ -1485,12 +1316,6 @@ void Gpio_PinDirection(uint8 port, uint8 pins, uint8 direction)
      9de:	08 95       	ret
 
 000009e0 <Gpio_PinWrite>:
- * @param pins : the pin Number {BIT0,BIT1,BIT2,BIT3,BIT4,BIT5,BIT6,BIT7}
- * @param value : The value of the PIN >> {HIGH , LOW}
- * Return : void
- */
-void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
-{
      9e0:	cf 93       	push	r28
      9e2:	df 93       	push	r29
      9e4:	00 d0       	rcall	.+0      	; 0x9e6 <Gpio_PinWrite+0x6>
@@ -1500,7 +1325,6 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      9ec:	89 83       	std	Y+1, r24	; 0x01
      9ee:	6a 83       	std	Y+2, r22	; 0x02
      9f0:	4b 83       	std	Y+3, r20	; 0x03
-	switch(value)
      9f2:	8b 81       	ldd	r24, Y+3	; 0x03
      9f4:	88 2f       	mov	r24, r24
      9f6:	90 e0       	ldi	r25, 0x00	; 0
@@ -1509,19 +1333,7 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      9fc:	42 c0       	rjmp	.+132    	; 0xa82 <Gpio_PinWrite+0xa2>
      9fe:	01 97       	sbiw	r24, 0x01	; 1
      a00:	09 f0       	breq	.+2      	; 0xa04 <Gpio_PinWrite+0x24>
-			PORT_D &= ~(pins);
-			break;
-		}
-		break;	
-	}
-}
      a02:	86 c0       	rjmp	.+268    	; 0xb10 <Gpio_PinWrite+0x130>
-void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
-{
-	switch(value)
-	{
-		case HIGH:
-			switch(port)
      a04:	89 81       	ldd	r24, Y+1	; 0x01
      a06:	88 2f       	mov	r24, r24
      a08:	90 e0       	ldi	r25, 0x00	; 0
@@ -1533,37 +1345,13 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      a14:	1c f4       	brge	.+6      	; 0xa1c <Gpio_PinWrite+0x3c>
      a16:	89 2b       	or	r24, r25
      a18:	39 f0       	breq	.+14     	; 0xa28 <Gpio_PinWrite+0x48>
-						break;
-					case MYPORTD :
-						PORT_D |= (pins);
-						break;
-		}
-		break;
      a1a:	7a c0       	rjmp	.+244    	; 0xb10 <Gpio_PinWrite+0x130>
-void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
-{
-	switch(value)
-	{
-		case HIGH:
-			switch(port)
      a1c:	82 30       	cpi	r24, 0x02	; 2
      a1e:	91 05       	cpc	r25, r1
      a20:	c9 f0       	breq	.+50     	; 0xa54 <Gpio_PinWrite+0x74>
      a22:	03 97       	sbiw	r24, 0x03	; 3
      a24:	11 f1       	breq	.+68     	; 0xa6a <Gpio_PinWrite+0x8a>
-						break;
-					case MYPORTD :
-						PORT_D |= (pins);
-						break;
-		}
-		break;
      a26:	74 c0       	rjmp	.+232    	; 0xb10 <Gpio_PinWrite+0x130>
-	{
-		case HIGH:
-			switch(port)
-			{
-					case MYPORTA :
-						PORT_A |= (pins);
      a28:	8b e3       	ldi	r24, 0x3B	; 59
      a2a:	90 e0       	ldi	r25, 0x00	; 0
      a2c:	2b e3       	ldi	r18, 0x3B	; 59
@@ -1574,10 +1362,7 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      a36:	23 2b       	or	r18, r19
      a38:	fc 01       	movw	r30, r24
      a3a:	20 83       	st	Z, r18
-						break;
      a3c:	21 c0       	rjmp	.+66     	; 0xa80 <Gpio_PinWrite+0xa0>
-					case MYPORTB :
-						PORT_B |= (pins);
      a3e:	88 e3       	ldi	r24, 0x38	; 56
      a40:	90 e0       	ldi	r25, 0x00	; 0
      a42:	28 e3       	ldi	r18, 0x38	; 56
@@ -1588,10 +1373,7 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      a4c:	23 2b       	or	r18, r19
      a4e:	fc 01       	movw	r30, r24
      a50:	20 83       	st	Z, r18
-						break;
      a52:	16 c0       	rjmp	.+44     	; 0xa80 <Gpio_PinWrite+0xa0>
-					case MYPORTC :
-						PORT_C |= (pins);
      a54:	85 e3       	ldi	r24, 0x35	; 53
      a56:	90 e0       	ldi	r25, 0x00	; 0
      a58:	25 e3       	ldi	r18, 0x35	; 53
@@ -1602,10 +1384,7 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      a62:	23 2b       	or	r18, r19
      a64:	fc 01       	movw	r30, r24
      a66:	20 83       	st	Z, r18
-						break;
      a68:	0b c0       	rjmp	.+22     	; 0xa80 <Gpio_PinWrite+0xa0>
-					case MYPORTD :
-						PORT_D |= (pins);
      a6a:	82 e3       	ldi	r24, 0x32	; 50
      a6c:	90 e0       	ldi	r25, 0x00	; 0
      a6e:	22 e3       	ldi	r18, 0x32	; 50
@@ -1616,14 +1395,8 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      a78:	23 2b       	or	r18, r19
      a7a:	fc 01       	movw	r30, r24
      a7c:	20 83       	st	Z, r18
-						break;
      a7e:	00 00       	nop
-		}
-		break;
      a80:	47 c0       	rjmp	.+142    	; 0xb10 <Gpio_PinWrite+0x130>
-		
-		case LOW : 
-		switch(port)
      a82:	89 81       	ldd	r24, Y+1	; 0x01
      a84:	88 2f       	mov	r24, r24
      a86:	90 e0       	ldi	r25, 0x00	; 0
@@ -1635,37 +1408,13 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      a92:	1c f4       	brge	.+6      	; 0xa9a <Gpio_PinWrite+0xba>
      a94:	89 2b       	or	r24, r25
      a96:	39 f0       	breq	.+14     	; 0xaa6 <Gpio_PinWrite+0xc6>
-			break;
-			case MYPORTD :
-			PORT_D &= ~(pins);
-			break;
-		}
-		break;	
      a98:	3a c0       	rjmp	.+116    	; 0xb0e <Gpio_PinWrite+0x12e>
-						break;
-		}
-		break;
-		
-		case LOW : 
-		switch(port)
      a9a:	82 30       	cpi	r24, 0x02	; 2
      a9c:	91 05       	cpc	r25, r1
      a9e:	e9 f0       	breq	.+58     	; 0xada <Gpio_PinWrite+0xfa>
      aa0:	03 97       	sbiw	r24, 0x03	; 3
      aa2:	41 f1       	breq	.+80     	; 0xaf4 <Gpio_PinWrite+0x114>
-			break;
-			case MYPORTD :
-			PORT_D &= ~(pins);
-			break;
-		}
-		break;	
      aa4:	34 c0       	rjmp	.+104    	; 0xb0e <Gpio_PinWrite+0x12e>
-		
-		case LOW : 
-		switch(port)
-		{
-			case MYPORTA :
-			PORT_A &= ~(pins);
      aa6:	8b e3       	ldi	r24, 0x3B	; 59
      aa8:	90 e0       	ldi	r25, 0x00	; 0
      aaa:	2b e3       	ldi	r18, 0x3B	; 59
@@ -1678,10 +1427,7 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      ab8:	23 23       	and	r18, r19
      aba:	fc 01       	movw	r30, r24
      abc:	20 83       	st	Z, r18
-			break;
      abe:	27 c0       	rjmp	.+78     	; 0xb0e <Gpio_PinWrite+0x12e>
-			case MYPORTB :
-			PORT_B &= ~(pins);
      ac0:	88 e3       	ldi	r24, 0x38	; 56
      ac2:	90 e0       	ldi	r25, 0x00	; 0
      ac4:	28 e3       	ldi	r18, 0x38	; 56
@@ -1694,10 +1440,7 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      ad2:	23 23       	and	r18, r19
      ad4:	fc 01       	movw	r30, r24
      ad6:	20 83       	st	Z, r18
-			break;
      ad8:	1a c0       	rjmp	.+52     	; 0xb0e <Gpio_PinWrite+0x12e>
-			case MYPORTC :
-			PORT_C &= ~(pins);
      ada:	85 e3       	ldi	r24, 0x35	; 53
      adc:	90 e0       	ldi	r25, 0x00	; 0
      ade:	25 e3       	ldi	r18, 0x35	; 53
@@ -1710,10 +1453,7 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      aec:	23 23       	and	r18, r19
      aee:	fc 01       	movw	r30, r24
      af0:	20 83       	st	Z, r18
-			break;
      af2:	0d c0       	rjmp	.+26     	; 0xb0e <Gpio_PinWrite+0x12e>
-			case MYPORTD :
-			PORT_D &= ~(pins);
      af4:	82 e3       	ldi	r24, 0x32	; 50
      af6:	90 e0       	ldi	r25, 0x00	; 0
      af8:	22 e3       	ldi	r18, 0x32	; 50
@@ -1726,13 +1466,8 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      b06:	23 23       	and	r18, r19
      b08:	fc 01       	movw	r30, r24
      b0a:	20 83       	st	Z, r18
-			break;
      b0c:	00 00       	nop
-		}
-		break;	
      b0e:	00 00       	nop
-	}
-}
      b10:	00 00       	nop
      b12:	0f 90       	pop	r0
      b14:	0f 90       	pop	r0
@@ -1742,12 +1477,6 @@ void Gpio_PinWrite(uint8 port, uint8 pins, uint8 value)
      b1c:	08 95       	ret
 
 00000b1e <Gpio_PinToggle>:
- * @param port : the port that includes the pin {MYPORTA,MYPORTB,MYPORTC,MYPORTD}
- * @param pins : the pin Number {BIT0,BIT1,BIT2,BIT3,BIT4,BIT5,BIT6,BIT7}
- * Return : void
- */
-void Gpio_PinToggle(uint8 port, uint8 pins)
-{
      b1e:	cf 93       	push	r28
      b20:	df 93       	push	r29
      b22:	00 d0       	rcall	.+0      	; 0xb24 <Gpio_PinToggle+0x6>
@@ -1755,7 +1484,6 @@ void Gpio_PinToggle(uint8 port, uint8 pins)
      b26:	de b7       	in	r29, 0x3e	; 62
      b28:	89 83       	std	Y+1, r24	; 0x01
      b2a:	6a 83       	std	Y+2, r22	; 0x02
-	switch(port)
      b2c:	89 81       	ldd	r24, Y+1	; 0x01
      b2e:	88 2f       	mov	r24, r24
      b30:	90 e0       	ldi	r25, 0x00	; 0
@@ -1767,37 +1495,13 @@ void Gpio_PinToggle(uint8 port, uint8 pins)
      b3c:	1c f4       	brge	.+6      	; 0xb44 <Gpio_PinToggle+0x26>
      b3e:	89 2b       	or	r24, r25
      b40:	39 f0       	breq	.+14     	; 0xb50 <Gpio_PinToggle+0x32>
-		break;
-		case MYPORTD :
-		PORT_D ^= (pins);
-		break;
-	}
-}
      b42:	32 c0       	rjmp	.+100    	; 0xba8 <Gpio_PinToggle+0x8a>
- * @param pins : the pin Number {BIT0,BIT1,BIT2,BIT3,BIT4,BIT5,BIT6,BIT7}
- * Return : void
- */
-void Gpio_PinToggle(uint8 port, uint8 pins)
-{
-	switch(port)
      b44:	82 30       	cpi	r24, 0x02	; 2
      b46:	91 05       	cpc	r25, r1
      b48:	c9 f0       	breq	.+50     	; 0xb7c <Gpio_PinToggle+0x5e>
      b4a:	03 97       	sbiw	r24, 0x03	; 3
      b4c:	11 f1       	breq	.+68     	; 0xb92 <Gpio_PinToggle+0x74>
-		break;
-		case MYPORTD :
-		PORT_D ^= (pins);
-		break;
-	}
-}
      b4e:	2c c0       	rjmp	.+88     	; 0xba8 <Gpio_PinToggle+0x8a>
-void Gpio_PinToggle(uint8 port, uint8 pins)
-{
-	switch(port)
-	{
-		case MYPORTA :
-		PORT_A ^= (pins);
      b50:	8b e3       	ldi	r24, 0x3B	; 59
      b52:	90 e0       	ldi	r25, 0x00	; 0
      b54:	2b e3       	ldi	r18, 0x3B	; 59
@@ -1808,10 +1512,7 @@ void Gpio_PinToggle(uint8 port, uint8 pins)
      b5e:	23 27       	eor	r18, r19
      b60:	fc 01       	movw	r30, r24
      b62:	20 83       	st	Z, r18
-		break;
      b64:	21 c0       	rjmp	.+66     	; 0xba8 <Gpio_PinToggle+0x8a>
-		case MYPORTB :
-		PORT_B ^= (pins);
      b66:	88 e3       	ldi	r24, 0x38	; 56
      b68:	90 e0       	ldi	r25, 0x00	; 0
      b6a:	28 e3       	ldi	r18, 0x38	; 56
@@ -1822,10 +1523,7 @@ void Gpio_PinToggle(uint8 port, uint8 pins)
      b74:	23 27       	eor	r18, r19
      b76:	fc 01       	movw	r30, r24
      b78:	20 83       	st	Z, r18
-		break;
      b7a:	16 c0       	rjmp	.+44     	; 0xba8 <Gpio_PinToggle+0x8a>
-		case MYPORTC :
-		PORT_C ^= (pins);
      b7c:	85 e3       	ldi	r24, 0x35	; 53
      b7e:	90 e0       	ldi	r25, 0x00	; 0
      b80:	25 e3       	ldi	r18, 0x35	; 53
@@ -1836,10 +1534,7 @@ void Gpio_PinToggle(uint8 port, uint8 pins)
      b8a:	23 27       	eor	r18, r19
      b8c:	fc 01       	movw	r30, r24
      b8e:	20 83       	st	Z, r18
-		break;
      b90:	0b c0       	rjmp	.+22     	; 0xba8 <Gpio_PinToggle+0x8a>
-		case MYPORTD :
-		PORT_D ^= (pins);
      b92:	82 e3       	ldi	r24, 0x32	; 50
      b94:	90 e0       	ldi	r25, 0x00	; 0
      b96:	22 e3       	ldi	r18, 0x32	; 50
@@ -1850,10 +1545,7 @@ void Gpio_PinToggle(uint8 port, uint8 pins)
      ba0:	23 27       	eor	r18, r19
      ba2:	fc 01       	movw	r30, r24
      ba4:	20 83       	st	Z, r18
-		break;
      ba6:	00 00       	nop
-	}
-}
      ba8:	00 00       	nop
      baa:	0f 90       	pop	r0
      bac:	0f 90       	pop	r0
@@ -1862,17 +1554,10 @@ void Gpio_PinToggle(uint8 port, uint8 pins)
      bb2:	08 95       	ret
 
 00000bb4 <Interrupts_On>:
- * Description : This function is used to turn On the global interrupt mask
- * Return : the function Returns nothing
- */
-
-void Interrupts_On(void)
-{     
      bb4:	cf 93       	push	r28
      bb6:	df 93       	push	r29
      bb8:	cd b7       	in	r28, 0x3d	; 61
      bba:	de b7       	in	r29, 0x3e	; 62
-	SET_BIT(SREG,GIE);
      bbc:	8f e5       	ldi	r24, 0x5F	; 95
      bbe:	90 e0       	ldi	r25, 0x00	; 0
      bc0:	2f e5       	ldi	r18, 0x5F	; 95
@@ -1882,7 +1567,6 @@ void Interrupts_On(void)
      bc8:	20 68       	ori	r18, 0x80	; 128
      bca:	fc 01       	movw	r30, r24
      bcc:	20 83       	st	Z, r18
-}
      bce:	00 00       	nop
      bd0:	df 91       	pop	r29
      bd2:	cf 91       	pop	r28

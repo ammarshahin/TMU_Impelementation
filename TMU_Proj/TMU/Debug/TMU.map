@@ -942,17 +942,17 @@ END GROUP
  .debug_abbrev  0x0000099c      0x1cc Mcal/Timer/src/Timers.o
  .debug_abbrev  0x00000b68       0x7a Mcal/Timer/src/Timers_Lcfg.o
 
-.debug_line     0x00000000     0x1d56
+.debug_line     0x00000000     0x1d55
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x115 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_line    0x00000115      0x1ff Ecual/Led/src/Led.o
- .debug_line    0x00000314      0x3b7 Firmware/TMU/src/Tmu.o
- .debug_line    0x000006cb       0x7a Firmware/TMU/src/Tmu_Lcfg.o
- .debug_line    0x00000745      0x14f main.o
- .debug_line    0x00000894      0x80b Mcal/Gpio/src/Gpio.o
- .debug_line    0x0000109f      0x1c9 Mcal/Interrupt/src/Interrupts.o
- .debug_line    0x00001268      0xa66 Mcal/Timer/src/Timers.o
- .debug_line    0x00001cce       0x88 Mcal/Timer/src/Timers_Lcfg.o
+ .debug_line    0x00000314      0x3b6 Firmware/TMU/src/Tmu.o
+ .debug_line    0x000006ca       0x7a Firmware/TMU/src/Tmu_Lcfg.o
+ .debug_line    0x00000744      0x14f main.o
+ .debug_line    0x00000893      0x80b Mcal/Gpio/src/Gpio.o
+ .debug_line    0x0000109e      0x1c9 Mcal/Interrupt/src/Interrupts.o
+ .debug_line    0x00001267      0xa66 Mcal/Timer/src/Timers.o
+ .debug_line    0x00001ccd       0x88 Mcal/Timer/src/Timers_Lcfg.o
 
 .debug_frame    0x00000000      0xbc0
  *(.debug_frame)
@@ -963,25 +963,25 @@ END GROUP
  .debug_frame   0x00000448       0x74 Mcal/Interrupt/src/Interrupts.o
  .debug_frame   0x000004bc      0x704 Mcal/Timer/src/Timers.o
 
-.debug_str      0x00000000     0x112b
+.debug_str      0x00000000     0x115e
  *(.debug_str)
  .debug_str     0x00000000      0x196 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_str     0x00000196      0x16a Ecual/Led/src/Led.o
                                 0x19e (size before relaxing)
- .debug_str     0x00000300      0x25f Firmware/TMU/src/Tmu.o
-                                0x3a0 (size before relaxing)
- .debug_str     0x0000055f       0x29 Firmware/TMU/src/Tmu_Lcfg.o
-                                0x18e (size before relaxing)
- .debug_str     0x00000588       0x55 main.o
-                                0x1d8 (size before relaxing)
- .debug_str     0x000005dd      0x176 Mcal/Gpio/src/Gpio.o
+ .debug_str     0x00000300      0x292 Firmware/TMU/src/Tmu.o
+                                0x3a9 (size before relaxing)
+ .debug_str     0x00000592       0x29 Firmware/TMU/src/Tmu_Lcfg.o
+                                0x197 (size before relaxing)
+ .debug_str     0x000005bb       0x55 main.o
+                                0x1e1 (size before relaxing)
+ .debug_str     0x00000610      0x176 Mcal/Gpio/src/Gpio.o
                                 0x2c7 (size before relaxing)
- .debug_str     0x00000753       0x5e Mcal/Interrupt/src/Interrupts.o
+ .debug_str     0x00000786       0x5e Mcal/Interrupt/src/Interrupts.o
                                 0x1a9 (size before relaxing)
- .debug_str     0x000007b1      0x95a Mcal/Timer/src/Timers.o
-                                0xb1d (size before relaxing)
- .debug_str     0x0000110b       0x20 Mcal/Timer/src/Timers_Lcfg.o
-                                0x306 (size before relaxing)
+ .debug_str     0x000007e4      0x95a Mcal/Timer/src/Timers.o
+                                0xb26 (size before relaxing)
+ .debug_str     0x0000113e       0x20 Mcal/Timer/src/Timers_Lcfg.o
+                                0x30f (size before relaxing)
 
 .debug_loc      0x00000000     0x1958
  *(.debug_loc)

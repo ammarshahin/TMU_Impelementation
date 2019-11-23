@@ -5,7 +5,6 @@
  *  Author: Ammar Shahin
  */ 
 
-
 #ifndef TMU_LCFG_H_
 #define TMU_LCFG_H_
 
@@ -13,26 +12,10 @@
 /*                               INCLUDES                               */
 /************************************************************************/
 #include "Typedefs.h"
-#include "Tmu.h"
-
-/************************************************************************/
-/*                        Constants and Macros                          */
-/************************************************************************/
-/* the Timers Defines Numbers */
-#define TIMER_0  0
-#define TIMER_1  1
-#define TIMER_2  2
-
-
-/* the default resolution in milliseconds */
-#define DEFAULT_RESELOTION 1
-
 
 /************************************************************************/
 /*                       STRUCTS AND UNIONS                              */
 /************************************************************************/
-/************** Post Build Structure **************/
-
 typedef struct TMU_ConfigType{
 	uint8 Timer_no;
 	uint8 Resolution;
