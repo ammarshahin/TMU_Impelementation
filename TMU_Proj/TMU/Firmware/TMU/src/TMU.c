@@ -29,7 +29,7 @@
 static StrTMU_Job_type gStrTMU_JobsBuffer[MAX_NO_OF_JOBS];
 static uint8 gJobsCount;
 static uint8 gTimerNumber;
-static uint8 gTimer_Flag;
+static volatile uint8 gTimer_Flag;
 
 /************************************************************************/
 /*                           APIs IMPLEMENTATION                        */
