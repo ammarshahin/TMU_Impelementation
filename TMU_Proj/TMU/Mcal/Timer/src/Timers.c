@@ -31,9 +31,10 @@ volatile uint8 Gv_PrescallerTimer2_Mask = T2_PRESCALER_1;
 
 static volatile uint32 Gv_F_CPU;
 static volatile uint16  Gv_Count;
-volatile uint8 Timer_Flag;
 
 volatile uint8 Time_Init;
+
+volatile v_ptrFun_v gPtrCallBk = NULL; 
 
 /************************************************************************/
 /*                               MACROS                                 */
@@ -728,8 +729,26 @@ void Timers_timer2_SwPWM(uint8 dutyCycle,uint64 freq)
 }
 
 
+/**
+ * Function : Timers_SetCallBack
+ * Description: This function is used to set the Call Back Function in the Timer
+ * @return void
+ */
+void Timers_SetCallBack(v_ptrFun_v FuncName)
+{
+	gPtrCallBk = FuncName;
+}
+
+
 ISR_T(TIMER1_OVF_vect)
 {
-	Timer_Flag = TRUE;
+	if(gPtrCallBk != NULL)
+	{
+		gPtrCallBk();
+	}
+	else
+	{
+		// Do Nothing	
+	}
 	Timers_SetCounter(TIMER1,Gv_Count);
 }

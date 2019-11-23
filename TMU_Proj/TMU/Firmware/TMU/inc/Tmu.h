@@ -35,8 +35,6 @@
 /************************************************************************/
 /*                               PRIMITIVE TYPES                         */
 /************************************************************************/
-/* defining a typedef pointer to function that takes nothing and returns nothing */
-typedef void (*v_ptrFun_v)(void);
 
 
 /************************************************************************/
@@ -60,7 +58,7 @@ typedef struct{
 	uint32 job_Time; // in microSeconds
 	uint32 job_Passed;
 	v_ptrFun_v job_Funptr;
-}job_Struct;
+}StrTMU_Job_type;
 
 /************************************************************************/
 /*                       FUNCTION-LIKE MACROS                           */
@@ -77,7 +75,7 @@ typedef struct{
  * Description: this function is to initialize the Timer management unit 
  * @param ConfigPtr pointer to the Configuration Structure which include:
  * 								1- Timer_no: the Channel of the Timer(Timer0,Timer1,Timer2)
- *								2- the Resolution of the Tmu which is the smallest delay that can be done in milliseconds
+ *								2- the Resolution of the Tmu which is the smallest delay that can be dINITIAL_VALUE_ONE in milliseconds
  * 								3- the Max Number Of Jobs that can be created 
  * @return Status: of the initialization according to the Error handling macros 
  */
@@ -123,4 +121,10 @@ void TMU_Dispatcher(void);
  */
 EnmTMUError_t TMU_DeInit(void);
 
+/**
+ * Function : TMU_SetCallBkFunction
+ * Description: This function is used to set the Call Back Function in the TMU
+ * @return void
+ */
+void TMU_SetCallBkFunction(void);
 #endif /* TMU_H_ */

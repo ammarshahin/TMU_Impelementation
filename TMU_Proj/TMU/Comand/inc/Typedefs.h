@@ -22,6 +22,9 @@ typedef signed long int sint32;
 typedef signed long long sint64;
 typedef volatile uint8* const reg_type;
 
+/* Defining a typedef pointer to function that takes nothing and returns nothing */
+typedef void (*v_ptrFun_v)(void);
+
 /************************************************************************/
 /*				      defining the NULL Pointer                         */
 /************************************************************************/

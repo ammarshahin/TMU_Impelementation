@@ -200,8 +200,7 @@ extern volatile uint16 Gv_PrescallerTimer2_AbsoluteValue;
 extern volatile uint8 Gv_PrescallerTimer0_Mask;
 extern volatile uint8 Gv_PrescallerTimer1_Mask;
 extern volatile uint8 Gv_PrescallerTimer2_Mask;
-extern volatile uint8 Timer_Flag;
-extern volatile uint8 Time_Init;
+
 /************************************************************************/
 /*                   Timers' Functions' prototypes                      */
 /************************************************************************/
@@ -442,5 +441,11 @@ void Timers_timer2_Delay_ns(uint32 delay);
  */
 void Timers_timer2_SwPWM(uint8 dutyCycle,uint64 freq);
 
+/**
+ * Function : Timers_SetCallBack
+ * Description: This function is used to set the Call Back Function in the Timer
+ * @return void
+ */
+void Timers_SetCallBack(v_ptrFun_v FuncName);
 
 #endif /* TIMERS_H_ */
