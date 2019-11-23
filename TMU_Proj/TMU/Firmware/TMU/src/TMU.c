@@ -168,6 +168,11 @@ EnmTMUError_t TMU_Start_Timer(uint32 delay_time, uint8 job_Type, v_ptrFun_v call
 			}
 		}
 	}
+	else
+	{
+		/* Do Nothing */
+	}
+	
 	
 	return state;
 }
